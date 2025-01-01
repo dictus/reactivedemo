@@ -4,13 +4,19 @@ import com.spr.reactivedemo.module.SearchRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers;
 
 @SpringBootTest
 @AutoConfigureWebTestClient  // Automatically configure WebTestClient
+/*
+@EnableAutoConfiguration(exclude = { SecurityAutoConfiguration .class })
+*/
 public class ReactiveSearchControllerIntegrationTest {
 
     @Autowired
@@ -24,7 +30,9 @@ public class ReactiveSearchControllerIntegrationTest {
     @Test
     public void testSearch_Success() {
         // Perform POST request and validate the response
-        webTestClient.post().uri("/search")
+        webTestClient
+                .mutateWith(SecurityMockServerConfigurers.csrf()) // Provide a valid CSRF token
+                .post().uri("/search")
                 .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
                 .bodyValue("{\"keyword\": \"test\", \"email\": \"test@example.com\", \"age\": 30}")
                 .exchange()
