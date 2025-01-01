@@ -1,15 +1,12 @@
 package com.spr.reactivedemo.controller;
 
 import com.spr.reactivedemo.module.SearchRequest;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
-import reactor.core.publisher.Mono;
-
-import java.util.Objects;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-
 import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Mono;
 
 @Slf4j
 @RestController
