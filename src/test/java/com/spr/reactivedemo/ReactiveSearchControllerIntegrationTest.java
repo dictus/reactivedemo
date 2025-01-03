@@ -1,12 +1,24 @@
 package com.spr.reactivedemo;
 
+import com.spr.reactivedemo.module.Shift;
+import com.spr.reactivedemo.services.ShiftService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.security.test.web.reactive.server.SecurityMockServerConfigurers;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import reactor.core.publisher.Flux;
+
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
 @AutoConfigureWebTestClient  // Automatically configure WebTestClient
@@ -17,6 +29,10 @@ public class ReactiveSearchControllerIntegrationTest {
 
     @Autowired
     private WebTestClient webTestClient;  // Automatically inject WebTestClient
+
+    @Autowired
+    private ShiftService shiftService;
+
 
     @BeforeEach
     public void setUp() {
@@ -66,4 +82,35 @@ public class ReactiveSearchControllerIntegrationTest {
                 .expectBody()
                 .jsonPath("$.message").isEqualTo("Validation Errors: email: Invalid email format");
     }
+
+    @Test
+    void testGetMergedShifts() {
+        List<Shift> inputShifts = Arrays.asList(
+                new Shift("2025-01-01", "09:00", "17:00"),
+                new Shift("2025-01-01", "15:00", "22:00"),
+                new Shift("2025-01-02", "09:00", "17:00"),
+                new Shift("2025-01-03", "15:00", "22:00")
+        );
+
+        List<Shift> mergedShifts = Arrays.asList(
+                new Shift("2025-01-01", "09:00", "22:00"),
+                new Shift("2025-01-02", "09:00", "17:00"),
+                new Shift("2025-01-03", "15:00", "22:00")
+        ).stream().sorted(Comparator.comparing(Shift::getDate).reversed()).collect(Collectors.toList());
+
+
+        // Perform the test
+        webTestClient
+                .mutateWith(SecurityMockServerConfigurers.csrf())
+                .post()
+                .uri("/api/colleague/shifts")
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(Flux.fromIterable(inputShifts), Shift.class)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(Shift.class)
+                .isEqualTo(mergedShifts);
+
+    }
+
 }

@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Shift {
-    private int start;
-    private int end;
+    private String date;
+    private String startTime;
+    private String endTime;
 }

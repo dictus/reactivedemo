@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 import java.util.List;
 
@@ -19,8 +21,10 @@ public class ShiftController {
     private ShiftService shiftService;
 
     @PostMapping("/shifts")
-    public ResponseEntity<List<Shift>> getMergedShifts(@RequestBody List<Shift> shifts) {
-        List<Shift> mergedShifts = shiftService.mergeShifts(shifts);
-        return ResponseEntity.ok(mergedShifts);
+    public Mono<ResponseEntity<List<Shift>>> getMergedShifts(@RequestBody Flux<Shift> shifts) {
+        return shifts
+                .collectList() // Collect the Flux<Shift> into a List<Shift>
+                .flatMap(shiftService::mergeShifts) // Call the service to process the list
+                .map(mergedShifts -> ResponseEntity.ok(mergedShifts)); // Wrap the result in ResponseEntity
     }
 }
