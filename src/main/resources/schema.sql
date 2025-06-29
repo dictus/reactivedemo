@@ -24,3 +24,15 @@ CREATE TABLE orders (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (medicine_id) REFERENCES medicines(id) ON DELETE CASCADE
 );
+
+
+INSERT into medicines values (1,'te',3,100);
+INSERT into medicines values (2,'te3',4,200);
+
+CREATE TABLE if not exists event (
+    id BIGINT PRIMARY KEY,
+    name VARCHAR(100) NOT NULL ,
+    location VARCHAR(100) NOT  NULL,
+    cost BIGINT NOT NULL,
+    duration BIGINT NOT NULL
+);
