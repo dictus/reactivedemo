@@ -1,5 +1,5 @@
 -- Create Users Table
-CREATE TABLE users (
+CREATE TABLE if not exists users (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
@@ -7,7 +7,7 @@ CREATE TABLE users (
 );
 
 -- Create Medicines Table
-CREATE TABLE medicines (
+CREATE TABLE if not exists medicines (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
     max_quantity INT NOT NULL,
@@ -15,7 +15,7 @@ CREATE TABLE medicines (
 );
 
 -- Create Orders Table
-CREATE TABLE orders (
+CREATE TABLE  if not exists orders (
     id BIGINT AUTO_INCREMENT PRIMARY KEY,
     user_id BIGINT NOT NULL,
     medicine_id BIGINT NOT NULL,
@@ -26,8 +26,8 @@ CREATE TABLE orders (
 );
 
 
-INSERT into medicines values (1,'te',3,100);
-INSERT into medicines values (2,'te3',4,200);
+--INSERT into medicines values (1,'te',3,100);
+--INSERT into medicines values (2,'te3',4,200);
 
 CREATE TABLE if not exists event (
     id BIGINT PRIMARY KEY,
@@ -35,4 +35,11 @@ CREATE TABLE if not exists event (
     location VARCHAR(100) NOT  NULL,
     cost BIGINT NOT NULL,
     duration BIGINT NOT NULL
+);
+
+CREATE TABLE if not exists EMPLOYEES (
+    EMP_ID        INT   PRIMARY KEY,
+    EMP_NAME      VARCHAR(100) NOT NULL,
+    DEPARTMENT    VARCHAR(50),
+    UPDATED_AT    TIMESTAMP     DEFAULT CURRENT_TIMESTAMP
 );
