@@ -1,15 +1,14 @@
 package com.spr.reactivedemo.controller;
 
 import com.spr.reactivedemo.module.SearchRequest;
-import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Mono;
 
-import java.util.Objects;
-import java.util.function.Supplier;
-import java.util.stream.Stream;
-
-import jakarta.validation.Valid;
-
+@Slf4j
 @RestController
 public class   ReactiveSearchController {
 
@@ -31,7 +30,7 @@ public class   ReactiveSearchController {
                 () -> Objects.nonNull(searchRequest.age())
         ).anyMatch(Supplier::get);
     }*/
-    private boolean isValidSearchRequest(SearchRequest searchRequest) {
+    /*private boolean isValidSearchRequest(SearchRequest searchRequest) {
         if (isValidKeyword(searchRequest.keyword())) {
             return true;
         }
@@ -42,7 +41,18 @@ public class   ReactiveSearchController {
             return true;
         }
         return false;
+    }*/
+    private boolean isValidSearchRequest(SearchRequest searchRequest) {
+        if (searchRequest == null) return false;
+
+        return switch (searchRequest) {
+            case SearchRequest r when isValidKeyword(r.keyword()) -> true;
+            case SearchRequest r when isValidEmail(r.email()) -> true;
+            case SearchRequest r when r.age() != null -> true;
+            default -> false;
+        };
     }
+
 
 
 
