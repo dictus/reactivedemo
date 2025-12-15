@@ -1,86 +1,57 @@
-/*
 package com.spr.reactivedemo.services;
-*/
-/*
-* Given a string array words, return an array of all characters that show up in all strings within the words (including duplicates). You may return the answer in any order.
 
 
-
-Example 1:
-
-Input: words = ["bella","label","roller"]
-Output: ["e","l","l"]
-Example 2:
-
-Input: words = ["cool","lock","cook"]
-Output: ["c","o"]
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
-Constraints:
+/*Explanation:
 
-1 <= words.length <= 100
-1 <= words[i].length <= 100
-words[i] consists of lowercase English letters.*//*
+current keeps track of the length of the current smooth descent period.
 
+If prices[i-1] - prices[i] == 1, extend the period by incrementing current.
 
- */
-/*
-* Balanced strings are those that have an equal quantity of 'L' and 'R' characters.
+Otherwise, start a new period (current = 1).
 
-Given a balanced string s, split it into some number of substrings such that:
+count += current adds all subperiods ending at day i.
 
-Each substring is balanced.
-Return the maximum number of balanced strings you can obtain.
+Why this works:
 
-
-
-Example 1:
-
-Input: s = "RLRRLLRLRL"
-Output: 4
-Explanation: s can be split into "RL", "RRLL", "RL", "RL", each substring contains same number of 'L' and 'R'.
-Example 2:
-
-Input: s = "RLRRRLLRLL"
-Output: 2
-Explanation: s can be split into "RL", "RRRLLRLL", each substring contains same number of 'L' and 'R'.
-Note that s cannot be split into "RL", "RR", "RL", "LR", "LL", because the 2nd and 5th substrings are not balanced.
-Example 3:
-
-Input: s = "LLLLRRRR"
-Output: 1
-Explanation: s can be split into "LLLLRRRR".
-
-
-Constraints:
-
-2 <= s.length <= 1000
-s[i] is either 'L' or 'R'.
-s is a balanced string.*//*
-
-import java.util.*;
-
+For a descent of length k, there are k + (k-1) + ... + 1 subperiods ending at each day, but by incrementally adding current, we account for all subperiods efficiently in O(n).*/
 public class DuplicateCharsiWords {
 
-    public static void main(String[] args) {
-        List<String> input = List.of("bella","label","roller");
 
+    public static void main(String[] args) {
+        String[] input = {"bella", "label", "roller"};
+        DuplicateCharsiWords dc = new DuplicateCharsiWords();
+        System.out.println(dc.commonChars(input)); // Output: [e, l, l]
     }
 
-    public List<String> commonChars(String[] words){
-        Map<Character, Integer> globalMap = new HashMap<>();
+    public List<String> commonChars(String[] words) {
+        // Initialize frequency map with first word
+        int[] globalFreq = new int[26];
+        Arrays.fill(globalFreq, Integer.MAX_VALUE); // Start with max so we can take min
 
-        for (char c : words[0].toCharArray()){
-            globalMap.put(c, globalMap.getOrDefault(c,0)+1);
+        for (String word : words) {
+            int[] currFreq = new int[26];
+            for (char c : word.toCharArray()) {
+                currFreq[c - 'a']++;
+            }
+            // Update globalFreq to keep min frequency
+            for (int i = 0; i < 26; i++) {
+                globalFreq[i] = Math.min(globalFreq[i], currFreq[i]);
+            }
         }
-        for (int i = 1; i < words.length; i++) {
-            Map<Character, Integer> currMap = new HashMap<>();
 
+        // Build result list
+        List<String> result = new ArrayList<>();
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < globalFreq[i]; j++) {
+                result.add(String.valueOf((char) (i + 'a')));
+            }
         }
 
-        return res;
-
-
+        return result;
     }
 }
-*/
