@@ -1,3 +1,4 @@
+TRUNCATE TABLE EVENT;
 INSERT INTO event (id, name, location, cost, duration) VALUES
 (1, 'Power Outage', 'antarctica', 100, 5),
 (2, 'Generator Test', 'antarctica', 80, 4),
