@@ -1,4 +1,4 @@
-package com.spr.reactivedemo.services;
+package com.spr.reactivedemo.t1;
 
 
 /*Problem: Given an array like ["raJan", "Raji", "Alex", "TOM", "aharrY" "berrY"]

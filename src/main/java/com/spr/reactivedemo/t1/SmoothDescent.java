@@ -1,4 +1,4 @@
-package com.spr.reactivedemo.services;
+package com.spr.reactivedemo.t1;
 
 public class SmoothDescent {
 
