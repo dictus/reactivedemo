@@ -9,4 +9,5 @@ INSERT INTO event (id, name, location, cost, duration) VALUES
 --(7, 'Heat Wave', null, 100, 5),           -- Invalid: null location
 --(8, null, 'africa', 200, 10),             -- Invalid: null name
 (9, 'Sandstorm', 'africa', 100, 2),
-(10, 'Rainstorm', 'africa', 150, 3);
+(10, 'Rainstorm', 'africa', 150, 3),
+(134, 'test', 'africa', 150, 3);
